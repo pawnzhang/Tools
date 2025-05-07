@@ -1,0 +1,73 @@
+# Use conda to create and activate environment
+conda create -n pytorch3d python=3.12 conda 
+activate pytorch3d
+# Installation Environment
+conda install -c fvcore -c iopath -c conda-forge fvcore iopathconda install jupyter
+pip install scikit-image matplotlib imageio plotly opencv-python
+pip install black usort flake8 flake8-bugbear flake8-comprehensions
+#Install PyTorch, TorchVision, and TorchAudio.
+pip install torch torchvision torchaudio
+#download Pytorch3d from github/facebookresearch/pytorch3d 
+#unzip to target-dir 
+cd pytorch3d
+# Modify pyTorch3d\setup.py file
+#- Comment out extra_compile_args = {"cxx": ["-std=c++17"]}
+#- Replace with extra_compile_args = {"cxx": []}
+# Install CUDA, cuDNN, and match with graphics card 
+# Install Visual Studio 2022
+
+# Open x64 Native Tools Command Prompt for VS 2022 as an administrator 
+# Find the installation directory of Visual Studio (this may be different for everyone, you need to find it yourself) 
+# My directory is located on drive D, the path is D:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC, here is a directory of 14.43.34808
+# may be different for everyone, but starts with prefix 14., pls remember the name 14.x.x...
+#Then find the path D:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build. Here, there is a batch file vcvarsall.bat. 
+#From the command line window opened with administrator privileges just now, enter this directory and run: 
+vcvarsall amd64 -vcvars_ver=14.43.34808
+#14.x.x is the name of the directory found above. 
+#After entering the command, you should see the Prompt window displaying successful environment initialization.
+
+# Continue to find the directory where you installed cuda, for example, my path is: C:\Program Files\NVIDIA GPU ComputingToolkit\CUDA\v12.8\include\thrust\system\cuda, here is a config.h 
+#Open config.h, find #ifndef THRUST_IGNORE_CUB_VERSION_CHECK, add a line before this line of code: #define THRUST_IGNORE_CUB_VERSION_CHECK
+# Note that this directory requires administrator privileges to write to, so saving the modified file requires permissions. Save config.h.
+# Return to the prompt window, return to the pytorch3d directory 
+cd pytorch3d 
+# Run the following command 
+set DISTUTILS_USE_SDK=1 
+set PYTORCH3D_NO_NINJA=1 
+python setup.py install
+
+# When the last program run finishes, the following message appears: 
+''''''
+Using e:\apps\anaconda\envs\pytorch3d\lib\site-packages
+Searching for portalocker==1.4.0
+Best match: portalocker 1.4.0
+Adding portalocker 1.4.0 to easy-install.pth file
+
+Using e:\apps\anaconda\envs\pytorch3d\lib\site-packages
+Searching for typing-extensions==4.13.2
+Best match: typing-extensions 4.13.2
+Adding typing-extensions 4.13.2 to easy-install.pth file
+
+Using e:\apps\anaconda\envs\pytorch3d\lib\site-packages
+Searching for tqdm==4.67.1
+Best match: tqdm 4.67.1
+Adding tqdm 4.67.1 to easy-install.pth file
+Installing tqdm-script.py script to E:\Apps\anaconda\envs\pytorch3d\Scripts
+Installing tqdm.exe script to E:\Apps\anaconda\envs\pytorch3d\Scripts
+
+Using e:\apps\anaconda\envs\pytorch3d\lib\site-packages
+Searching for colorama==0.4.6
+Best match: colorama 0.4.6
+Adding colorama 0.4.6 to easy-install.pth file
+
+Using e:\apps\anaconda\envs\pytorch3d\lib\site-packages
+Searching for pywin32==308
+Best match: pywin32 308
+Adding pywin32 308 to easy-install.pth file
+
+Using e:\apps\anaconda\envs\pytorch3d\lib\site-packages
+Finished processing dependencies for pytorch3d==0.7.8
+''''''
+#Done and Success，
+pip wheel --wheel-dir=e:\apps\whl .\ 
+#compile .whl file saved.
